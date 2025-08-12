@@ -7,7 +7,7 @@ local winner
 local winnerName = ""
 
 -- intial config
-love.window.setMode(1920, 1080, {
+love.window.setMode(1920, 1200, {
       fullscreen = false, -- standard should be true
       vsync = 1,
     }
@@ -25,8 +25,6 @@ function love.draw()
   ringScene.draw()
   
   verifyWinner()
-  
-  love.graphics.print("O vencedor foi: " .. winnerName, 0, 0)
 end
 
 function love.update(dt)

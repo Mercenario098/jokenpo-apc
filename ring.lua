@@ -14,7 +14,10 @@ local leftImage = love.graphics.newImage(rockImage)
 local rightImage = love.graphics.newImage(scissorsImage)
 local rounds = 10
 local widthLifebar = 800
-local marginLifeBar = 50
+local marginHorizontalLiferBar = 50
+local marginTopLifeBar = 70
+local fontFile = "font/Yourmate.ttf"
+local playerNamer = ""
 
 --[[
   returns
@@ -29,6 +32,7 @@ function ring.load()
   coinImage = love.graphics.newImage("img/rings/coin_star.png")
   
   setPlayers()
+  drawPlayerName()
 end
 
 function ring.draw()
@@ -37,51 +41,84 @@ function ring.draw()
   love.graphics.draw(rightImage, 1670, 350, 0, -0.30, 0.30)
   
   setupScoreboard()
+  drawPlayerName()
 end
 
 function setPlayers()
+  colorBlue = {0.2, 0.6, 1}
+  colorRed = {1, 0.3, 0.3}
+  
     players = {
         {
             name = configP1.PLAYER_NAME,
-            health = rounds,
-            wins = 2,
-            x = marginLifeBar,
-            y = 50,
-            color = {0.2, 0.6, 1}
+            health = rounds-9,
+            wins = 12,
+            x = marginHorizontalLiferBar,
+            y = marginTopLifeBar,
+            color = colorBlue
         },
         {
             name = configP2.PLAYER_NAME,
-            health = rounds,
-            wins = 3,
-            x = love.graphics.getWidth() - widthLifebar - marginLifeBar,
-            y = 50,
-            color = {1, 0.3, 0.3}
+            health = rounds -2,
+            wins = 10,
+            x = love.graphics.getWidth() - widthLifebar - marginHorizontalLiferBar,
+            y = marginTopLifeBar,
+            color = colorRed
         }
     }
 end
 
-function setupScoreboard() 
+function drawPlayerName()
+  marginBottom = 40
+  
+  font = love.graphics.newFont(fontFile, 26)
+
   for i, player in ipairs(players) do
-        love.graphics.setColor(1, 1, 1)
-        love.graphics.print(player.name, player.x, player.y - 30)
-        
+    love.graphics.setColor(1, 1, 1)
+      
+    textWidth = font:getWidth(player.name)
+    playerNameText = love.graphics.newText(font, player.name) 
+
+    if i == 1 then
+      love.graphics.draw(playerNameText, player.x, player.y - marginBottom)
+    else
+      love.graphics.draw(playerNameText,  player.x + widthLifebar - textWidth, player.y - marginBottom)
+    end  
+  end
+end
+
+function setupScoreboard()     
+  local height = 30
+  local coinSpacing = 30
+  
+    for i, player in ipairs(players) do        
         -- life bar background
         love.graphics.setColor(0.3, 0.3, 0.3)
-        love.graphics.rectangle("fill", player.x, player.y, widthLifebar, 30)
+        love.graphics.rectangle("fill", player.x, player.y, widthLifebar, height)
         
         -- life bar filled
         love.graphics.setColor(player.color)
         local healthWidth = (player.health / rounds) * widthLifebar
-        love.graphics.rectangle("fill", player.x, player.y, healthWidth, 30)
+        
+        if i == 1 then
+            love.graphics.rectangle("fill", player.x, player.y, healthWidth, height)
+        else
+            love.graphics.rectangle("fill", player.x + (widthLifebar - healthWidth), player.y, healthWidth, height)
+        end
         
         love.graphics.setColor(1, 1, 1)
-        love.graphics.rectangle("line", player.x, player.y, widthLifebar, 30)
+        love.graphics.rectangle("line", player.x, player.y, widthLifebar, height)
         
         for j = 1, player.wins do
-            local coinX = player.x + (j-1) * 30
             local coinY = player.y + 40
             
-            love.graphics.draw(coinImage, coinX, coinY, 0, 0.1, 0.1)
+            if i == 1 then
+                local coinX = player.x + widthLifebar - (j * coinSpacing + 20)
+                love.graphics.draw(coinImage, coinX, coinY, 0, 0.1, 0.1)
+            else
+                local coinX = player.x + (j-1) * coinSpacing
+                love.graphics.draw(coinImage, coinX, coinY, 0, 0.1, 0.1)
+            end
         end
     end
 end
