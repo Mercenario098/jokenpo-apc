@@ -3,7 +3,7 @@ local menu = {}
 local fontFile = "font/Yourmate.ttf"
 
 function menu.loadImage()
-  menuImage = "img/wallpaper/menu.jpg"
+  menuImage = "img/backgrounds/menu.jpg"
   imageData = love.graphics.newImage(menuImage)
 end
 

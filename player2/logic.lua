@@ -1,4 +1,8 @@
+local logic = {}
+local hand = require("utils")
 
-function getHand(lastOpponentHand) -- is hand from last time
-    return random()
+function logic.getHand() -- is hand from last time
+  return hand.HAND.paper
 end
+
+return logic
