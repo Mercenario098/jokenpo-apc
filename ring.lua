@@ -4,8 +4,6 @@ local configP1 = require("player1.config")
 local configP2 = require("player2.config")
 local logicP1 = require("player1.logic")
 local logicP2 = require("player2.logic")
-local handLeft
-local handRight
 local background = "img/rings/ring-1.jpg"
 local rockImage = "img/hands/rock.png"
 local paperImage = "img/hands/paper.png" 
@@ -17,7 +15,6 @@ local widthLifebar = 800
 local marginHorizontalLiferBar = 50
 local marginTopLifeBar = 70
 local fontFile = "font/Yourmate.ttf"
-local playerNamer = ""
 
 --[[
   returns
