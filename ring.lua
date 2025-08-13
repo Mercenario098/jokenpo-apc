@@ -8,11 +8,10 @@ local background = "img/rings/ring-1.jpg"
 local rockImage = "img/hands/rock.png"
 local paperImage = "img/hands/paper.png" 
 local scissorsImage = "img/hands/scissors.png" 
-local leftImage = love.graphics.newImage(rockImage)
-local rightImage = love.graphics.newImage(scissorsImage)
+local leftHandImage
+local rightHandImage
 local rounds = 10
 local widthLifebar = 800
-local marginHorizontalLiferBar = 50
 local marginTopLifeBar = 70
 local fontFile = "font/Yourmate.ttf"
 
@@ -33,31 +32,45 @@ function ring.load()
 end
 
 function ring.draw()
-  love.graphics.draw(backgroundImage, 0, 0)
-  love.graphics.draw(leftImage, 250, 350, 0, 0.30, 0.30)
-  love.graphics.draw(rightImage, 1670, 350, 0, -0.30, 0.30)
-  
+  setupBackground()
+  setupHands()
   setupScoreboard()
   drawPlayerName()
 end
 
+function drawBackground()
+  love.graphics.draw(backgroundImage, 0, 0)
+end
+
+function setupHands()
+  if leftHandImage ~= nil then
+    love.graphics.draw(leftHandImage, 250, 350, 0, 0.30, 0.30)
+  end
+
+  if rightHandImage ~= nil then
+    love.graphics.draw(rightHandImage, 1670, 350, 0, -0.30, 0.30)
+  end
+end
+
 function setPlayers()
+  local marginHorizontalLiferBar = 50
+
   colorBlue = {0.2, 0.6, 1}
   colorRed = {1, 0.3, 0.3}
   
     players = {
         {
             name = configP1.PLAYER_NAME,
-            health = rounds-9,
-            wins = 12,
+            health = rounds,
+            wins = 0,
             x = marginHorizontalLiferBar,
             y = marginTopLifeBar,
             color = colorBlue
         },
         {
             name = configP2.PLAYER_NAME,
-            health = rounds -2,
-            wins = 10,
+            health = rounds,
+            wins = 0,
             x = love.graphics.getWidth() - widthLifebar - marginHorizontalLiferBar,
             y = marginTopLifeBar,
             color = colorRed
@@ -141,19 +154,19 @@ end
 
 function updateHands()
   if handLeft == hand.HAND.rock then
-    leftImage = love.graphics.newImage(rockImage)
+    leftHandImage = love.graphics.newImage(rockImage)
   elseif handLeft == hand.HAND.paper then
-    leftImage = love.graphics.newImage(paperImage)
+    leftHandImage = love.graphics.newImage(paperImage)
   else 
-    leftImage = love.graphics.newImage(scissorsImage)
+    leftHandImage = love.graphics.newImage(scissorsImage)
   end
   
   if handRight == hand.HAND.rock then
-    rightImage = love.graphics.newImage(rockImage)
+    rightHandImage = love.graphics.newImage(rockImage)
   elseif handRight == hand.HAND.paper then
-    rightImage = love.graphics.newImage(paperImage)
+    rightHandImage = love.graphics.newImage(paperImage)
   else 
-    rightImage = love.graphics.newImage(scissorsImage)
+    rightHandImage = love.graphics.newImage(scissorsImage)
   end
 end
 
