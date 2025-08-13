@@ -23,8 +23,6 @@ function love.draw()
   -- menuScene.setContent()
   
   ringScene.draw()
-  
-  verifyWinner()
 end
 
 function love.update(dt)
@@ -32,16 +30,6 @@ function love.update(dt)
   
   if nextUpdate <= 0 then
     nextUpdate = 1.0
-    winner = ringScene.runFight()
-  end
-end
-
-function verifyWinner()
-  if winner == 1 then
-    winnerName = configP1.PLAYER_NAME
-  elseif winner == 2 then
-    winnerName = configP2.PLAYER_NAME
-  else
-    winnerName = "Empate"
+    ringScene.update()
   end
 end

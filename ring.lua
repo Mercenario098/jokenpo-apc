@@ -40,6 +40,18 @@ function ring.draw()
   drawPlayerName()
 end
 
+function ring.update()
+  result = runFight()
+
+  if result == 1 then
+    players[1].wins = players[1].wins + 1
+    players[2].health = players[2].health - 1
+  elseif result == 2 then
+    players[2].wins = players[2].wins + 1
+    players[1].health = players[1].health - 1
+  end
+end
+
 function drawBackground()
   love.graphics.draw(backgroundImage, 0, 0)
 end
@@ -135,7 +147,7 @@ function drawScoreboard()
     end
 end
 
-function ring.runFight()
+function runFight()
   handLeft = logicP1.getHand(lastRight)
   handRight = logicP2.getHand(lastLeft)
 
