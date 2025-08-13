@@ -14,6 +14,8 @@ local rounds = 10
 local widthLifebar = 800
 local marginTopLifeBar = 70
 local fontFile = "font/Yourmate.ttf"
+local lastLeft
+local lastRight
 
 --[[
   returns
@@ -32,9 +34,9 @@ function ring.load()
 end
 
 function ring.draw()
-  setupBackground()
-  setupHands()
-  setupScoreboard()
+  drawBackground()
+  drawHands()
+  drawScoreboard()
   drawPlayerName()
 end
 
@@ -42,7 +44,7 @@ function drawBackground()
   love.graphics.draw(backgroundImage, 0, 0)
 end
 
-function setupHands()
+function drawHands()
   if leftHandImage ~= nil then
     love.graphics.draw(leftHandImage, 250, 350, 0, 0.30, 0.30)
   end
@@ -97,7 +99,7 @@ function drawPlayerName()
   end
 end
 
-function setupScoreboard()     
+function drawScoreboard()     
   local height = 30
   local coinSpacing = 30
   
@@ -134,9 +136,12 @@ function setupScoreboard()
 end
 
 function ring.runFight()
-  handLeft = logicP1.getHand()
-  handRight = logicP2.getHand()
-  
+  handLeft = logicP1.getHand(lastRight)
+  handRight = logicP2.getHand(lastLeft)
+
+  lastLeft = handLeft
+  lastRight = handRight
+
   updateHands()
   
   if (handLeft == handRight) then
