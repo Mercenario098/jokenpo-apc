@@ -16,6 +16,7 @@ local marginTopLifeBar = 70
 local fontFile = "font/Yourmate.ttf"
 local lastLeft
 local lastRight
+local stop = false
 
 --[[
   returns
@@ -41,6 +42,8 @@ function ring.draw()
 end
 
 function ring.update()
+  if stop then return end
+
   result = runFight()
 
   if result == 1 then
@@ -49,6 +52,12 @@ function ring.update()
   elseif result == 2 then
     players[2].wins = players[2].wins + 1
     players[1].health = players[1].health - 1
+  end
+
+  if players[1].health == 0 then
+    stop = true
+  elseif players[2].health == 0 then
+    stop = true
   end
 end
 
