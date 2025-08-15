@@ -11,12 +11,16 @@ local scissorsImage = "img/hands/scissors.png"
 local leftHandImage
 local rightHandImage
 local rounds = 10
-local widthLifebar = 800
+local widthLifebar
 local marginTopLifeBar = 70
 local fontFile = "font/Yourmate.ttf"
 local lastLeft
 local lastRight
 local stop = false
+local widthScreen
+local heightScreen
+local factorWidthScale
+local factorHeightScale
 
 --[[
   returns
@@ -25,11 +29,14 @@ local stop = false
   righ win -> 2
 --]]
 
-function ring.load() 
+function ring.load(width, height)
+  widthScreen = width
+  heightScreen = height
+  
   backgroundImage = love.graphics.newImage(background)
-  
   coinImage = love.graphics.newImage("img/rings/coin_star.png")
-  
+
+  setDimensions()
   setPlayers()
   drawPlayerName()
 end
@@ -62,17 +69,29 @@ function ring.update()
 end
 
 function drawBackground()
-  love.graphics.draw(backgroundImage, 0, 0)
+  local scaleX = widthScreen / backgroundImage:getWidth()
+  local scaleY = heightScreen / backgroundImage:getHeight()
+  
+  love.graphics.draw(backgroundImage, 0, 0, 0, scaleX, scaleY)
 end
 
 function drawHands()
-  if leftHandImage ~= nil then
-    love.graphics.draw(leftHandImage, 250, 350, 0, 0.30, 0.30)
-  end
+  if leftHandImage ~= nil and rightHandImage ~= nil then
+    handY = (heightScreen / 2) - (200 * factorHeightScale)
+    handLeftX = 100
+    handRightX = 900
+    scaleX = factorHeightScale * 0.30
+    scaleY = factorHeightScale * 0.30
 
-  if rightHandImage ~= nil then
-    love.graphics.draw(rightHandImage, 1670, 350, 0, -0.30, 0.30)
+    love.graphics.draw(leftHandImage, factorWidthScale * handLeftX, handY, 0, scaleX, scaleY)
+    love.graphics.draw(rightHandImage, factorWidthScale * handRightX,  handY, 0, -scaleX, scaleY)
   end
+end
+
+function setDimensions()
+  factorWidthScale = widthScreen / 1000
+  factorHeightScale = heightScreen / 1000
+  widthLifebar = factorWidthScale * 400
 end
 
 function setPlayers()

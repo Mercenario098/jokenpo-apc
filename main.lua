@@ -5,9 +5,11 @@ local configP2 = require("player2.config")
 local nextUpdate = 1.0
 local winner
 local winnerName = ""
+local screenWidth = 2880
+local screenHeight = 1800
 
 -- intial config
-love.window.setMode(1920, 1200, {
+love.window.setMode(screenWidth, screenHeight, {
       fullscreen = false, -- standard should be true
       vsync = 1,
     }
@@ -15,7 +17,7 @@ love.window.setMode(1920, 1200, {
 
 function love.load()
   -- menuScene.loadImage()
-  ringScene.load()
+  ringScene.load(screenWidth, screenHeight)
 end
 
 function love.draw() 
