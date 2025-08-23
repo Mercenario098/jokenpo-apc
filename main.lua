@@ -10,7 +10,7 @@ local screenHeight = 1080
 
 -- intial config
 love.window.setMode(screenWidth, screenHeight, {
-      fullscreen = false, -- standard should be true
+      fullscreen = true, -- standard should be true
       vsync = 1,
     }
 )

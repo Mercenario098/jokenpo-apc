@@ -11,6 +11,7 @@ local scissorsImage = "img/hands/hand-scissors.png"
 local armImage = "img/hands/arm.png"
 local forearmImage = "img/hands/forearm.png"
 local coinImage = "img/rings/coin_star.png"
+local koImage = "img/rings/ko.png"
 local leftHand = {
   image,
   positionX,
@@ -33,19 +34,13 @@ local heightScreen
 local factorWidthScale
 local factorHeightScale
 
---[[
-  returns
-  draw -> 0
-  left win -> 1
-  righ win -> 2
---]]
-
 function ring.load(width, height)
   widthScreen = width
   heightScreen = height
   
   backgroundImage = love.graphics.newImage(background)
   coinImage = love.graphics.newImage(coinImage)
+  koImage = love.graphics.newImage(koImage)
 
   setDimensions()
 
@@ -60,6 +55,7 @@ function ring.draw()
   drawHands()
   drawScoreboard()
   drawPlayerName()
+  drawWinner()
 end
 
 function setImageHands()
@@ -107,7 +103,7 @@ function drawHands()
     love.graphics.draw(imageForearm, factorWidthScale * 80, factorHeightScale * 687, 0, scale, scale)
     love.graphics.draw(imageArm, factorWidthScale * -20, factorHeightScale * 320, 0, scale, scale)
 
-     love.graphics.draw(imageForearm, factorWidthScale * 918, factorHeightScale * 687, 0, -scale, scale)
+    love.graphics.draw(imageForearm, factorWidthScale * 918, factorHeightScale * 687, 0, -scale, scale)
     love.graphics.draw(imageArm, factorWidthScale * 1018, factorHeightScale * 320, 0, -scale, scale)
   end
 end
@@ -160,6 +156,21 @@ function drawPlayerName()
     else
       love.graphics.draw(playerNameText,  player.x + widthLifebar - textWidth, player.y - marginBottom)
     end  
+  end
+end
+
+function drawWinner()
+  if stop then
+    winnerName = players[1].health == 0 and players[2].name or players[1].name
+    
+    local sizeKo = 0.8
+    local font = love.graphics.newFont(fontFile, 54)
+    local winnerText = love.graphics.newText(font, winnerName .. " venceu!!!")
+    local textWidth = winnerText:getWidth()
+    local textHeight = winnerText:getHeight()
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.draw(winnerText, (widthScreen - textWidth) / 2, heightScreen - 80 * factorHeightScale)
+    love.graphics.draw(koImage, (widthScreen - koImage:getWidth() * sizeKo) / 2, (heightScreen - koImage:getHeight() * sizeKo - 150 * factorHeightScale) / 2, 0, sizeKo, sizeKo)
   end
 end
 
