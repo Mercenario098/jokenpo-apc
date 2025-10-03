@@ -5,11 +5,23 @@ local configP2 = require("player2.config")
 local logicP1 = require("player1.logic")
 local logicP2 = require("player2.logic")
 local background = "img/rings/ring-1.jpg"
-local rockImage = "img/hands/rock.png"
-local paperImage = "img/hands/paper.png" 
-local scissorsImage = "img/hands/scissors.png" 
-local leftHandImage
-local rightHandImage
+local rockImage = "img/hands/hand-rock.png"
+local paperImage = "img/hands/hand-paper.png" 
+local scissorsImage = "img/hands/hand-scissors.png" 
+local armImage = "img/hands/arm.png"
+local forearmImage = "img/hands/forearm.png"
+local coinImage = "img/rings/coin_star.png"
+local koImage = "img/rings/ko.png"
+local leftHand = {
+  image,
+  positionX,
+  positionY,
+}
+local rightHand = {
+  image,
+  positionX,
+  positionY,
+}
 local rounds = 10
 local widthLifebar
 local marginTopLifeBar = 70
@@ -22,21 +34,18 @@ local heightScreen
 local factorWidthScale
 local factorHeightScale
 
---[[
-  returns
-  draw -> 0
-  left win -> 1
-  righ win -> 2
---]]
-
 function ring.load(width, height)
   widthScreen = width
   heightScreen = height
   
   backgroundImage = love.graphics.newImage(background)
-  coinImage = love.graphics.newImage("img/rings/coin_star.png")
+  coinImage = love.graphics.newImage(coinImage)
+  koImage = love.graphics.newImage(koImage)
 
   setDimensions()
+
+  setImageHands()
+
   setPlayers()
   drawPlayerName()
 end
@@ -46,6 +55,15 @@ function ring.draw()
   drawHands()
   drawScoreboard()
   drawPlayerName()
+  drawWinner()
+end
+
+function setImageHands()
+  imageHandRock = love.graphics.newImage(rockImage)
+  imageHandPaper = love.graphics.newImage(paperImage)
+  imageHandScissors = love.graphics.newImage(scissorsImage)
+  imageArm = love.graphics.newImage(armImage)
+  imageForearm = love.graphics.newImage(forearmImage)
 end
 
 function ring.update()
@@ -76,15 +94,17 @@ function drawBackground()
 end
 
 function drawHands()
-  if leftHandImage ~= nil and rightHandImage ~= nil then
-    handY = (heightScreen / 2) - (200 * factorHeightScale)
-    handLeftX = 100
-    handRightX = 900
-    scaleX = factorHeightScale * 0.30
-    scaleY = factorHeightScale * 0.30
+  if leftHand.image ~= nil and rightHand.image ~= nil then
+    scale = factorHeightScale * 0.6
 
-    love.graphics.draw(leftHandImage, factorWidthScale * handLeftX, handY, 0, scaleX, scaleY)
-    love.graphics.draw(rightHandImage, factorWidthScale * handRightX,  handY, 0, -scaleX, scaleY)
+    love.graphics.draw(leftHand.image, factorWidthScale * leftHand.positionX, leftHand.positionY, 0, scale, scale)
+    love.graphics.draw(rightHand.image, factorWidthScale * rightHand.positionX, rightHand.positionY, 0, -scale, scale)
+
+    love.graphics.draw(imageForearm, factorWidthScale * 80, factorHeightScale * 687, 0, scale, scale)
+    love.graphics.draw(imageArm, factorWidthScale * -20, factorHeightScale * 320, 0, scale, scale)
+
+    love.graphics.draw(imageForearm, factorWidthScale * 918, factorHeightScale * 687, 0, -scale, scale)
+    love.graphics.draw(imageArm, factorWidthScale * 1018, factorHeightScale * 320, 0, -scale, scale)
   end
 end
 
@@ -136,6 +156,21 @@ function drawPlayerName()
     else
       love.graphics.draw(playerNameText,  player.x + widthLifebar - textWidth, player.y - marginBottom)
     end  
+  end
+end
+
+function drawWinner()
+  if stop then
+    winnerName = players[1].health == 0 and players[2].name or players[1].name
+    
+    local sizeKo = 0.8
+    local font = love.graphics.newFont(fontFile, 54)
+    local winnerText = love.graphics.newText(font, winnerName .. " venceu!!!")
+    local textWidth = winnerText:getWidth()
+    local textHeight = winnerText:getHeight()
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.draw(winnerText, (widthScreen - textWidth) / 2, heightScreen - 80 * factorHeightScale)
+    love.graphics.draw(koImage, (widthScreen - koImage:getWidth() * sizeKo) / 2, (heightScreen - koImage:getHeight() * sizeKo - 150 * factorHeightScale) / 2, 0, sizeKo, sizeKo)
   end
 end
 
@@ -198,20 +233,34 @@ function runFight()
 end
 
 function updateHands()
+  handY = (heightScreen / 2) - (200 * factorHeightScale)
+
   if handLeft == hand.HAND.rock then
-    leftHandImage = love.graphics.newImage(rockImage)
+    leftHand.image = imageHandRock
+    leftHand.positionX = 311
+    leftHand.positionY = 700
   elseif handLeft == hand.HAND.paper then
-    leftHandImage = love.graphics.newImage(paperImage)
+    leftHand.image = imageHandPaper
+    leftHand.positionX = 311
+    leftHand.positionY = 645 
   else 
-    leftHandImage = love.graphics.newImage(scissorsImage)
+    leftHand.image = imageHandScissors
+    leftHand.positionX = 299
+    leftHand.positionY = 650
   end
   
   if handRight == hand.HAND.rock then
-    rightHandImage = love.graphics.newImage(rockImage)
+    rightHand.image = imageHandRock
+    rightHand.positionX = 687
+    rightHand.positionY = 700
   elseif handRight == hand.HAND.paper then
-    rightHandImage = love.graphics.newImage(paperImage)
+    rightHand.image = imageHandPaper
+    rightHand.positionX = 687
+    rightHand.positionY = 645
   else 
-    rightHandImage = love.graphics.newImage(scissorsImage)
+    rightHand.image = imageHandScissors
+    rightHand.positionX = 699
+    rightHand.positionY = 650
   end
 end
 

@@ -7,10 +7,14 @@ local winner
 local winnerName = ""
 local screenWidth = 1920
 local screenHeight = 1080
+<<<<<<< HEAD
+=======
+local mkSong = love.audio.newSource("song/mk-song.mp3", "stream")
+>>>>>>> 43b59aa027293188493b32b30843c838f22741e9
 
 -- intial config
 love.window.setMode(screenWidth, screenHeight, {
-      fullscreen = false, -- standard should be true
+      fullscreen = true, -- standard should be true
       vsync = 1,
     }
 )
@@ -18,6 +22,7 @@ love.window.setMode(screenWidth, screenHeight, {
 function love.load()
   -- menuScene.loadImage()
   ringScene.load(screenWidth, screenHeight)
+  mkSong:play()
 end
 
 function love.draw() 
