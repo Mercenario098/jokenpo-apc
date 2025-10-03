@@ -5,8 +5,8 @@ local configP2 = require("player2.config")
 local nextUpdate = 1.0
 local winner
 local winnerName = ""
-local screenWidth = 2880
-local screenHeight = 1800
+local screenWidth = 1920
+local screenHeight = 1080
 
 -- intial config
 love.window.setMode(screenWidth, screenHeight, {

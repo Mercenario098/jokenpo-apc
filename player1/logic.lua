@@ -1,5 +1,6 @@
 local hand = require("utils")
 local logic = {}
+local configP2 = require("player2.config")
 
 --[[
   rock = 1,
@@ -14,8 +15,15 @@ local logic = {}
 math.randomseed(os.time())
 
 function logic.getHand(opponentLastHand)
-   -- add you logic here
-  return math.random(1, 3)
+  if configP2 == hand.HAND.rock then
+    return hand.HAND.paper
+  end
+  elseif configP2 == hand.HAND.poper then
+    return hand.HAND.scissors
+  end
+  elseif configP2 == hand.HAND.scissors then
+  return hand.HAND.rock
 end
 
 return logic
+ 
